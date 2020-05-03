@@ -2,8 +2,11 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - ConnectionManager
+    - LowPolyWater.LowPolyWater
     - Player
     - SocketIO.SocketIOComponent
+    - randomMap
+    - showMap
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -15,19 +18,26 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.UI.dll:
+    - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
+    - UnityEngine.UI.InputField
+    - UnityEngine.UI.Text
     com.unity.multiplayer-hlapi.Runtime.dll:
     - UnityEngine.Networking.NetworkCallbacks
   sceneClasses:
-    Assets/Scenes/RealTime.unity:
+    Assets/Scenes/gamePlay.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -71,11 +81,33 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11232}
+      Script: {instanceID: 11224}
     - Class: 114
-      Script: {instanceID: 12284}
+      Script: {instanceID: 11236}
     - Class: 114
-      Script: {instanceID: 12550}
+      Script: {instanceID: 11466}
+    - Class: 114
+      Script: {instanceID: 11522}
+    - Class: 114
+      Script: {instanceID: 11926}
+    - Class: 114
+      Script: {instanceID: 12090}
+    - Class: 114
+      Script: {instanceID: 12294}
+    - Class: 114
+      Script: {instanceID: 12536}
+    - Class: 114
+      Script: {instanceID: 12562}
+    - Class: 114
+      Script: {instanceID: 12702}
+    - Class: 114
+      Script: {instanceID: 12954}
+    - Class: 114
+      Script: {instanceID: 13256}
+    - Class: 114
+      Script: {instanceID: 13380}
+    - Class: 114
+      Script: {instanceID: 13916}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -85,6 +117,14 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -289,6 +329,12 @@ ScriptsOnlyBuild:
     className: AnimationPlayableAsset
   - hash:
       serializedVersion: 2
+      Hash: 7c5084f22bda962db730d7217e88651b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: LowPolyWater
+    className: LowPolyWater
+  - hash:
+      serializedVersion: 2
       Hash: aba7b2852ef61d175dd9602e7723d5e5
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -361,7 +407,7 @@ ScriptsOnlyBuild:
     className: NetworkTransformVisualizer
   - hash:
       serializedVersion: 2
-      Hash: 04e0d2a0ef12493118b23e15adced7d0
+      Hash: 714a547a2e068a599d1910f923b82fd6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ConnectionManager
@@ -407,6 +453,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SpriteAnimator
+  - hash:
+      serializedVersion: 2
+      Hash: 9d881213c7bc0d381a1cfbef9c5d4ba3
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: randomMap
   - hash:
       serializedVersion: 2
       Hash: 18276cee0543fd305cd00ff5a56aec86
@@ -515,6 +567,12 @@ ScriptsOnlyBuild:
     assemblyName: com.unity.multiplayer-hlapi.Runtime.dll
     namespaceName: UnityEngine.Networking
     className: NetworkBehaviour
+  - hash:
+      serializedVersion: 2
+      Hash: 77b176f5c4ea0985dc4fc16d8400c73a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: showMap
   - hash:
       serializedVersion: 2
       Hash: 8001a5f7502aab37e42206da015e6914
@@ -701,13 +759,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 7c5084f22bda962db730d7217e88651b
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: LowPolyWater
-    className: LowPolyWater
   platform: 19
   scenePathNames:
-  - Assets/Scenes/RealTime.unity
-  playerPath: C:/Users/newwo/Downloads/SocketIO-Realtime-master/Unity/SocketIO-RealTime/build/test4/SocketIO-RealTime.exe
+  - Assets/Scenes/gamePlay.unity
+  playerPath: "D:/\u0E07\u0E32\u0E19/CGM499_Online/CGM499Online_FinalProject_ClamDownMyFriend/ClamDownMyFriend/build/test6/SocketIO-RealTime.exe"

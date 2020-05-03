@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(SocketIOComponent))]
 public class ConnectionManager : MonoBehaviour
@@ -65,74 +66,100 @@ public class ConnectionManager : MonoBehaviour
     public GameObject respawnPoint;
     private Vector3 respawnPVec;
 
-    private void OnGUI()
+    public GameObject connect;
+    public GameObject createRoom;
+    public GameObject joinRoom;
+    public GameObject leaveRoom;
+    public GameObject addRoomNameObj;
+    public GameObject back;
+    public GameObject roomList;
+    public GameObject joinRoomName;
+    public GameObject backFromJoin;
+    public GameObject makeRoom;
+    public GameObject joinToRoom;
+    public GameObject nameOfRoom;
+
+    public GameObject menu;
+    public int statusOfMenu = 1;
+
+    public InputField addRoomName;
+    public InputField addJoinName;
+
+    public Text showListTotalRoom;
+    public Text nameOfRoomText;
+
+    private string[] arrayRoomName;
+
+     
+    /*private void OnGUI()
     {
-        switch(connectionState)
+
+        switch (connectionState)
         {
-            case ConnectionState.Disconnected: 
-            {
-                if (GUILayout.Button("Connect"))
+            case ConnectionState.Disconnected:
                 {
-                    socket.Connect();
+                    if (GUILayout.Button("Connect"))
+                    {
+                        socket.Connect();
+                    }
+
+                    if (socket.IsConnected)
+                    {
+                        connectionState = ConnectionState.Connected;
+                    }
+
+                    break;
                 }
-                   
-                if(socket.IsConnected)
-                {
-                    connectionState = ConnectionState.Connected;
-                }
-            
-                break;
-            }
 
             case ConnectionState.Connected:
-            {
-                if(GUILayout.Button("CreateRoom"))
                 {
-                    connectionState = ConnectionState.RoleCreate;
-                }
+                    if (GUILayout.Button("CreateRoom"))
+                    {
+                        connectionState = ConnectionState.RoleCreate;
+                    }
 
-                if(GUILayout.Button("JoinRoom"))
-                {
-                    connectionState = ConnectionState.RoleJoin;
-                    socket.Emit("OnClientFetchRoomList");
+                    if (GUILayout.Button("JoinRoom"))
+                    {
+                        connectionState = ConnectionState.RoleJoin;
+                        socket.Emit("OnClientFetchRoomList");
+                    }
+                    break;
                 }
-                break;
-            }
 
             case ConnectionState.RoleCreate:
-            {
-                roomName = GUILayout.TextField(roomName);
-                if(GUILayout.Button("CreateRoom"))
                 {
-                    CreateRoom(roomName);
+                    roomName = GUILayout.TextField(roomName);
+                    if (GUILayout.Button("CreateRoom"))
+                    {
+                        CreateRoom(roomName);
+                    }
+                    break;
                 }
-                break;
-            }
 
             case ConnectionState.RoleJoin:
-            {
-                foreach(var _roomName in roomIDGroup.roomIDList)
                 {
-                    if(GUILayout.Button(_roomName))
+                    foreach (var _roomName in roomIDGroup.roomIDList)
                     {
-                        roomName = _roomName;
-                        JoinRoom(_roomName);
+                        if (GUILayout.Button(_roomName))
+                        {
+                            roomName = _roomName;
+                            JoinRoom(_roomName);
+                        }
                     }
+                    break;
                 }
-                break;
-            }
 
             case ConnectionState.InRoom:
-            {
-                GUILayout.TextField(ownerID);
-                if(GUILayout.Button("LeaveRoom"))
                 {
-                    LeaveRoom();
+                    GUILayout.TextField(ownerID);
+                    if (GUILayout.Button("LeaveRoom"))
+                    {
+                        LeaveRoom();
+                    }
+                    break;
                 }
-                break;
-            }
         }
-    }
+    }*/
 
     // Start is called before the first frame update
     void Start()
@@ -160,18 +187,51 @@ public class ConnectionManager : MonoBehaviour
 
         respawnPoint = GameObject.Find("respawnPoint");
         respawnPVec = new Vector3(respawnPoint.transform.position.x, respawnPoint.transform.position.y, respawnPoint.transform.position.z);
+
+       // menu = GameObject.Find("Canvas");
+       // menu.SetActive(false);
+
+      /*  connect = GameObject.Find("connect");
+        addRoomNameObj = GameObject.Find("addRoomName");
+        createRoom = GameObject.Find("createRoom");
+        joinRoom = GameObject.Find("joinRoom");
+        leaveRoom = GameObject.Find("leaveRoom");
+        back = GameObject.Find("backFromCreate");
+        roomList = GameObject.Find("roomList");
+        joinRoomName = GameObject.Find("joinRoomName");
+        backFromJoin = GameObject.Find("backFromJoin");
+        makeRoom = GameObject.Find("makeRoom");
+        joinToRoom = GameObject.Find("joinToRoom");*/
     }
 
     // Update is called once per frame
     void Update()
     {
+        connectManager();
+
         DetectPlayerConnect();
-        UpdateAllCharacter();
+        UpdateAllCharacter();       
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (statusOfMenu == 0)
+            {
+                statusOfMenu = 1;
+                menu.SetActive(true);
+            }
+
+           else if (statusOfMenu == 1)
+            {
+                statusOfMenu = 0;
+                menu.SetActive(false);
+            }
+        }
+
     }
 
     void UpdateAllCharacter()
     {
-        for(int i = 0; i < characterList.Count; i++)
+        for (int i = 0; i < characterList.Count; i++)
         {
             if (characterList[i].uid == ownerID)
                 continue;
@@ -185,9 +245,9 @@ public class ConnectionManager : MonoBehaviour
 
     IEnumerator UpdateOwnerPlayerData()
     {
-        while(connectionState == ConnectionState.InRoom)
+        while (connectionState == ConnectionState.InRoom)
         {
-            if(playerDataOwner != null && playerDataOwner.playerObj != null)
+            if (playerDataOwner != null && playerDataOwner.playerObj != null)
             {
                 Dictionary<string, string> data = new Dictionary<string, string>();
 
@@ -212,13 +272,17 @@ public class ConnectionManager : MonoBehaviour
 
     private void DetectPlayerConnect()
     {
-        if(cachePlayerIDGroup.playerIDList.Count != playerIDGroup.playerIDList.Count)
+        
+
+        if (cachePlayerIDGroup.playerIDList.Count != playerIDGroup.playerIDList.Count)
         {
+            Debug.Log("Detect");
+
             bool checkConnect;
             List<string> firstList;
             List<string> secondList;
 
-            if(playerIDGroup.playerIDList.Count > cachePlayerIDGroup.playerIDList.Count)
+            if (playerIDGroup.playerIDList.Count > cachePlayerIDGroup.playerIDList.Count)
             {
                 firstList = playerIDGroup.playerIDList;
                 secondList = cachePlayerIDGroup.playerIDList;
@@ -231,22 +295,24 @@ public class ConnectionManager : MonoBehaviour
                 checkConnect = false;
             }
 
-            foreach(var fID in firstList)
+            foreach (var fID in firstList)
             {
                 bool isFound = false;
-                foreach(var sID in secondList)
+                foreach (var sID in secondList)
                 {
-                    if(fID == sID)
+                    if (fID == sID)
                     {
                         isFound = true;
                         break;
                     }
                 }
 
-                if(!isFound)
+                if (!isFound)
                 {
-                    if(checkConnect)//Check player connect
+                    Debug.Log("Found");
+                    if (checkConnect)//Check player connect
                     {
+                        Debug.Log("checkConnectisTrue");
                         //Debug.Log("Player connected : " + fID);
                         CreateCharacter(fID);
                     }
@@ -282,9 +348,9 @@ public class ConnectionManager : MonoBehaviour
 
     private void DestroyCharacter(string uid)
     {
-        for(int i = 0; i < characterList.Count; i++)
+        for (int i = 0; i < characterList.Count; i++)
         {
-            if(characterList[i].uid == uid)
+            if (characterList[i].uid == uid)
             {
                 Destroy(characterList[i].playerObj.gameObject);
                 characterList.RemoveRange(i, 1);
@@ -298,7 +364,7 @@ public class ConnectionManager : MonoBehaviour
         Dictionary<string, string> data = new Dictionary<string, string>();
         data.Add("roomName", newRoomName);
         JSONObject jsonObj = new JSONObject(data);
- 
+
         socket.Emit("OnClientCreateRoom", jsonObj);
     }
 
@@ -324,6 +390,163 @@ public class ConnectionManager : MonoBehaviour
         data.Add("roomName", roomName);
         JSONObject jsonObj = new JSONObject(data);
         socket.Emit("OnClientFetchPlayerList", jsonObj);
+    }
+
+    private void connectManager()
+    {
+        switch (connectionState)
+        {
+            case ConnectionState.Disconnected:
+                {
+
+                    connect.SetActive(true);
+                    addRoomNameObj.SetActive(false);
+                    createRoom.SetActive(false);
+                    joinRoom.SetActive(false);
+                    leaveRoom.SetActive(false);
+                    back.SetActive(false);
+                    roomList.SetActive(false);
+                    joinRoomName.SetActive(false);
+                    backFromJoin.SetActive(false);
+                    makeRoom.SetActive(false);
+                    joinToRoom.SetActive(false);
+                    nameOfRoom.SetActive(false);
+                   
+                    if (socket.IsConnected)
+                    {
+                        connectionState = ConnectionState.Connected;
+                    }
+
+                    break;
+                }
+
+            case ConnectionState.Connected:
+                {
+                    connect.SetActive(false);
+                    addRoomNameObj.SetActive(false);
+                    createRoom.SetActive(true);
+                    joinRoom.SetActive(true);
+                    leaveRoom.SetActive(false);
+                    back.SetActive(false);
+                    roomList.SetActive(false);
+                    joinRoomName.SetActive(false);
+                    backFromJoin.SetActive(false);
+                    makeRoom.SetActive(false);
+                    joinToRoom.SetActive(false);
+                    nameOfRoom.SetActive(false);
+
+                    break;
+                }
+
+            case ConnectionState.RoleCreate:
+                {
+                    Debug.Log("create");
+
+                    connect.SetActive(false);
+                    addRoomNameObj.SetActive(true);
+                    createRoom.SetActive(false);
+                    joinRoom.SetActive(false);
+                    leaveRoom.SetActive(false);
+                    back.SetActive(true);
+                    roomList.SetActive(false);
+                    joinRoomName.SetActive(false);
+                    backFromJoin.SetActive(false);
+                    makeRoom.SetActive(true);
+                    joinToRoom.SetActive(false);
+                    nameOfRoom.SetActive(false);
+
+                    break;
+                }
+
+            case ConnectionState.RoleJoin:
+                {
+                    connect.SetActive(false);
+                    addRoomNameObj.SetActive(false);
+                    createRoom.SetActive(false);
+                    joinRoom.SetActive(false);
+                    leaveRoom.SetActive(false);
+                    back.SetActive(false);
+                    roomList.SetActive(true);
+                    joinRoomName.SetActive(true);
+                    backFromJoin.SetActive(true);
+                    makeRoom.SetActive(false);
+                    joinToRoom.SetActive(true);
+                    nameOfRoom.SetActive(false);
+
+                    int sizeOfList = roomIDGroup.roomIDList.Count;
+                    showListTotalRoom.text = "";
+
+                    for (int i=0;i<sizeOfList;i++)
+                    {
+                        showListTotalRoom.text += roomIDGroup.roomIDList[i] + "\n";
+                    }
+
+                    break;
+                }
+
+            case ConnectionState.InRoom:
+                {
+                    connect.SetActive(false);
+                    addRoomNameObj.SetActive(false);
+                    createRoom.SetActive(false);
+                    joinRoom.SetActive(false);
+                    leaveRoom.SetActive(true);
+                    back.SetActive(false);
+                    roomList.SetActive(false);
+                    joinRoomName.SetActive(false);
+                    backFromJoin.SetActive(false);
+                    makeRoom.SetActive(false);
+                    joinToRoom.SetActive(false);
+                    nameOfRoom.SetActive(true);
+
+                    nameOfRoomText.text = ownerID;
+
+                    break;
+                }
+        }
+    }//end void
+
+    public void clickConnect()
+    {
+        socket.Connect();
+    }
+
+    public void clickCreateRoom()
+    {        
+        connectionState = ConnectionState.RoleCreate;
+    }
+
+    public void clickJoinRoom()
+    {
+        connectionState = ConnectionState.RoleJoin;
+        socket.Emit("OnClientFetchRoomList");
+    }
+
+    public void clickToCreateRoom()
+    {
+        roomName = addRoomName.text;
+        CreateRoom(addRoomName.text);
+    }
+
+    public void clickToBackFromCreateRoom()
+    {
+        connectionState = ConnectionState.Connected;
+    }
+
+    public void clickToJoinToRoom()
+    {
+        roomName = addJoinName.text;
+        JoinRoom(addJoinName.text);
+    }
+
+    public void clickToBackFromJoinToRoom()
+    {
+        connectionState = ConnectionState.Connected;
+    }
+
+    public void clickToLeaveRoom()
+    {
+        LeaveRoom();
     }
 
     #region Callback Group
