@@ -90,7 +90,21 @@ public class ConnectionManager : MonoBehaviour
 
     private string[] arrayRoomName;
 
-     
+    public static string randomMapFromServer = "1";
+
+    public static string statusGame = "";
+
+    public GameObject textPlayerName;
+    public GameObject PlayerNameInput;
+
+    public InputField AddPlayerName;
+
+    private string playerName="";
+
+    public GameObject warningText;
+
+    private string CurrentroomName;
+
     /*private void OnGUI()
     {
 
@@ -183,25 +197,31 @@ public class ConnectionManager : MonoBehaviour
 
         socket.On("OnClientUpdateMoveList", OnClientUpdateMoveList);
 
+        socket.On("OnStartGame",OnGameStart);
+
+        socket.On("OnWinnerShow",OnWinnerShow);
+
         cachePlayerIDGroup = new PlayerIDGroup();
 
         respawnPoint = GameObject.Find("respawnPoint");
         respawnPVec = new Vector3(respawnPoint.transform.position.x, respawnPoint.transform.position.y, respawnPoint.transform.position.z);
 
-       // menu = GameObject.Find("Canvas");
-       // menu.SetActive(false);
+        // menu = GameObject.Find("Canvas");
+        // menu.SetActive(false);
 
-      /*  connect = GameObject.Find("connect");
-        addRoomNameObj = GameObject.Find("addRoomName");
-        createRoom = GameObject.Find("createRoom");
-        joinRoom = GameObject.Find("joinRoom");
-        leaveRoom = GameObject.Find("leaveRoom");
-        back = GameObject.Find("backFromCreate");
-        roomList = GameObject.Find("roomList");
-        joinRoomName = GameObject.Find("joinRoomName");
-        backFromJoin = GameObject.Find("backFromJoin");
-        makeRoom = GameObject.Find("makeRoom");
-        joinToRoom = GameObject.Find("joinToRoom");*/
+        /*  connect = GameObject.Find("connect");
+          addRoomNameObj = GameObject.Find("addRoomName");
+          createRoom = GameObject.Find("createRoom");
+          joinRoom = GameObject.Find("joinRoom");
+          leaveRoom = GameObject.Find("leaveRoom");
+          back = GameObject.Find("backFromCreate");
+          roomList = GameObject.Find("roomList");
+          joinRoomName = GameObject.Find("joinRoomName");
+          backFromJoin = GameObject.Find("backFromJoin");
+          makeRoom = GameObject.Find("makeRoom");
+          joinToRoom = GameObject.Find("joinToRoom");*/
+
+        warningText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -227,6 +247,25 @@ public class ConnectionManager : MonoBehaviour
             }
         }
 
+        if (playerTrigger.statusWinner==1)
+        {
+            statusGame = "stop";
+            playerTrigger.statusWinner = 0;
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            
+            data.Add("playername", playerName);
+            data.Add("timeM", timer.minuteShare);
+            data.Add("timeS", timer.secondShare);
+            data.Add("currentroomname",CurrentroomName);
+
+            JSONObject jsonObj = new JSONObject(data);
+
+            socket.Emit("OnPlayerWinner", jsonObj);
+
+        }
+
+        Debug.Log("Status Winner is " + playerTrigger.statusWinner); 
     }
 
     void UpdateAllCharacter()
@@ -398,20 +437,42 @@ public class ConnectionManager : MonoBehaviour
         {
             case ConnectionState.Disconnected:
                 {
+                    if (statusOfMenu == 1)
+                    {
+                        connect.SetActive(true);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }
 
-                    connect.SetActive(true);
-                    addRoomNameObj.SetActive(false);
-                    createRoom.SetActive(false);
-                    joinRoom.SetActive(false);
-                    leaveRoom.SetActive(false);
-                    back.SetActive(false);
-                    roomList.SetActive(false);
-                    joinRoomName.SetActive(false);
-                    backFromJoin.SetActive(false);
-                    makeRoom.SetActive(false);
-                    joinToRoom.SetActive(false);
-                    nameOfRoom.SetActive(false);
-                   
+                    else {
+                        //still 
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }
+
                     if (socket.IsConnected)
                     {
                         connectionState = ConnectionState.Connected;
@@ -422,56 +483,134 @@ public class ConnectionManager : MonoBehaviour
 
             case ConnectionState.Connected:
                 {
-                    connect.SetActive(false);
-                    addRoomNameObj.SetActive(false);
-                    createRoom.SetActive(true);
-                    joinRoom.SetActive(true);
-                    leaveRoom.SetActive(false);
-                    back.SetActive(false);
-                    roomList.SetActive(false);
-                    joinRoomName.SetActive(false);
-                    backFromJoin.SetActive(false);
-                    makeRoom.SetActive(false);
-                    joinToRoom.SetActive(false);
-                    nameOfRoom.SetActive(false);
+                    if (statusOfMenu == 1)
+                    {
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(true);
+                        joinRoom.SetActive(true);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(true);
+                        textPlayerName.SetActive(true);
+                        AddPlayerName.interactable=true;
+                    }
+
+                    else {
+                        //still
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }
 
                     break;
                 }
 
             case ConnectionState.RoleCreate:
                 {
-                    Debug.Log("create");
+                    //Debug.Log("create");
 
-                    connect.SetActive(false);
-                    addRoomNameObj.SetActive(true);
-                    createRoom.SetActive(false);
-                    joinRoom.SetActive(false);
-                    leaveRoom.SetActive(false);
-                    back.SetActive(true);
-                    roomList.SetActive(false);
-                    joinRoomName.SetActive(false);
-                    backFromJoin.SetActive(false);
-                    makeRoom.SetActive(true);
-                    joinToRoom.SetActive(false);
-                    nameOfRoom.SetActive(false);
+                    if (statusOfMenu == 1)
+                    {
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(true);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(true);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(true);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+
+                        PlayerNameInput.SetActive(true);
+                        textPlayerName.SetActive(true);
+                        AddPlayerName.interactable = false;
+
+                        AddPlayerName.text = playerName;
+                    }
+
+                    else {
+                        //still
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }                   
 
                     break;
                 }
 
             case ConnectionState.RoleJoin:
                 {
-                    connect.SetActive(false);
-                    addRoomNameObj.SetActive(false);
-                    createRoom.SetActive(false);
-                    joinRoom.SetActive(false);
-                    leaveRoom.SetActive(false);
-                    back.SetActive(false);
-                    roomList.SetActive(true);
-                    joinRoomName.SetActive(true);
-                    backFromJoin.SetActive(true);
-                    makeRoom.SetActive(false);
-                    joinToRoom.SetActive(true);
-                    nameOfRoom.SetActive(false);
+                    if (statusOfMenu == 1)
+                    {
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(true);
+                        joinRoomName.SetActive(true);
+                        backFromJoin.SetActive(true);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(true);
+                        nameOfRoom.SetActive(false);
+
+                        PlayerNameInput.SetActive(true);
+                        textPlayerName.SetActive(true);
+                        AddPlayerName.interactable = false;
+
+                        AddPlayerName.text = playerName;
+                    }
+
+                    else {
+                        //still
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }
 
                     int sizeOfList = roomIDGroup.roomIDList.Count;
                     showListTotalRoom.text = "";
@@ -486,20 +625,48 @@ public class ConnectionManager : MonoBehaviour
 
             case ConnectionState.InRoom:
                 {
-                    connect.SetActive(false);
-                    addRoomNameObj.SetActive(false);
-                    createRoom.SetActive(false);
-                    joinRoom.SetActive(false);
-                    leaveRoom.SetActive(true);
-                    back.SetActive(false);
-                    roomList.SetActive(false);
-                    joinRoomName.SetActive(false);
-                    backFromJoin.SetActive(false);
-                    makeRoom.SetActive(false);
-                    joinToRoom.SetActive(false);
-                    nameOfRoom.SetActive(true);
+                    if (statusOfMenu == 1)
+                    {
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(true);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(true);
 
-                    nameOfRoomText.text = ownerID;
+                        PlayerNameInput.SetActive(true);
+                        textPlayerName.SetActive(true);
+                        AddPlayerName.interactable = false;
+
+                        AddPlayerName.text = playerName;
+                    }
+
+                    else {
+                        connect.SetActive(false);
+                        addRoomNameObj.SetActive(false);
+                        createRoom.SetActive(false);
+                        joinRoom.SetActive(false);
+                        leaveRoom.SetActive(false);
+                        back.SetActive(false);
+                        roomList.SetActive(false);
+                        joinRoomName.SetActive(false);
+                        backFromJoin.SetActive(false);
+                        makeRoom.SetActive(false);
+                        joinToRoom.SetActive(false);
+                        nameOfRoom.SetActive(false);
+                        PlayerNameInput.SetActive(false);
+                        textPlayerName.SetActive(false);
+                    }
+
+
+                    // nameOfRoomText.text = ownerID;
+                    nameOfRoomText.text ="Room Name : "+ CurrentroomName;
 
                     break;
                 }
@@ -512,20 +679,44 @@ public class ConnectionManager : MonoBehaviour
     }
 
     public void clickCreateRoom()
-    {        
-        connectionState = ConnectionState.RoleCreate;
+    {
+        if (AddPlayerName.text=="")
+        {
+            //still
+            StartCoroutine(waitForHideWarning());
+        }
+
+        if (AddPlayerName.text != "")
+        {
+            connectionState = ConnectionState.RoleCreate;
+            playerName = AddPlayerName.text;
+        }
+       
     }
 
     public void clickJoinRoom()
     {
-        connectionState = ConnectionState.RoleJoin;
-        socket.Emit("OnClientFetchRoomList");
+        if (AddPlayerName.text == "")
+        {
+            //still
+            StartCoroutine(waitForHideWarning());
+        }
+
+        if (AddPlayerName.text != "")
+        {
+            connectionState = ConnectionState.RoleJoin;
+            socket.Emit("OnClientFetchRoomList");
+
+            playerName = AddPlayerName.text;
+        }
+            
     }
 
     public void clickToCreateRoom()
     {
         roomName = addRoomName.text;
         CreateRoom(addRoomName.text);
+        CurrentroomName = addRoomName.text;
     }
 
     public void clickToBackFromCreateRoom()
@@ -537,6 +728,7 @@ public class ConnectionManager : MonoBehaviour
     {
         roomName = addJoinName.text;
         JoinRoom(addJoinName.text);
+        CurrentroomName = addJoinName.text;
     }
 
     public void clickToBackFromJoinToRoom()
@@ -546,7 +738,34 @@ public class ConnectionManager : MonoBehaviour
 
     public void clickToLeaveRoom()
     {
+        CurrentroomName = "";
         LeaveRoom();
+       
+    }
+
+    void OnGameStart(SocketIOEvent evt)
+    {
+        Debug.Log("StartGame!!! : " + evt.data.ToString());
+        // Debug.Log("StartGame!!! : " + evt.data["startgame"].ToString());
+
+        statusGame = evt.data["startgame"].str;
+               
+       randomMapFromServer = evt.data["randomMap"].ToString();
+           
+       Debug.Log("updateStatus");
+        
+    }
+
+    IEnumerator waitForHideWarning()
+    {
+        warningText.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        warningText.SetActive(false);
+    }
+
+    void OnWinnerShow(SocketIOEvent evt)
+    {
+
     }
 
     #region Callback Group
@@ -565,6 +784,8 @@ public class ConnectionManager : MonoBehaviour
     void OnOwnerClientConnect(SocketIOEvent evt)
     {
         Debug.Log("OnOwnerClientConnect : " + evt.data.ToString());
+        // Debug.Log("the random is "+ evt.data["randomMap"].ToString());
+       // randomMapFromServer = evt.data["randomMap"].ToString();
     }
 
     void OnClientFetchPlayerList(SocketIOEvent evt)

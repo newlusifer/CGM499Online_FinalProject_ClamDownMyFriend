@@ -666,6 +666,7 @@ GameObject:
   - component: {fileID: 1953930659185780462}
   - component: {fileID: 5582673309502241839}
   - component: {fileID: -3501192012860417602}
+  - component: {fileID: -1932846567018014505}
   m_Layer: 0
   m_Name: Toon Chicken
   m_TagString: Untagged
@@ -725,6 +726,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canControl: 0
   speedMove: 2.5
+  camera: {fileID: 0}
+  speed: 1
 --- !u!54 &5582673309502241839
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -752,8 +755,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.340978, y: 0.46121228, z: 0.48280847}
+  m_Center: {x: -0.0021489412, y: 0.2236917, z: -0.008595765}
+--- !u!114 &-1932846567018014505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5917604303912148869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b567cdc5d1055440a7b9f12c1afd296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnPoint: {fileID: 0}
 --- !u!1 &5917607589402960199
 GameObject:
   m_ObjectHideFlags: 0
