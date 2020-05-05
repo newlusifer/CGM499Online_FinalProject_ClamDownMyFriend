@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public float speed = 1f;
     private Animator animator;
 
+    private int statusChick = 0;
+
     void Start()
     {
         camera = GameObject.Find("Main Camera");
@@ -20,6 +22,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (statusChick==0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+
+        else if (statusChick == 1)
+        {            
+            //canRotate
+        }
+
+
         if (!canControl)
             return;
 
@@ -36,12 +49,15 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
             animator.SetBool("Walk", true);
 
-            Debug.Log(transform.position);
+            statusChick = 1;
+
+           // Debug.Log(transform.position);
         }
 
         if (Input.GetKeyUp(KeyCode.W))
         {
             animator.SetBool("Walk", false);
+            statusChick = 0;
         }
 
         if (Input.GetKey(KeyCode.S))
@@ -49,11 +65,13 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
             transform.rotation = Quaternion.Euler(0, 180, 0);
             animator.SetBool("Walk", true);
+            statusChick = 1;
         }
 
         if (Input.GetKeyUp(KeyCode.S))
         {
             animator.SetBool("Walk", false);
+            statusChick = 0;
         }
 
         if (Input.GetKey(KeyCode.D))
@@ -61,11 +79,13 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
             transform.rotation = Quaternion.Euler(0, 90, 0);
             animator.SetBool("Walk", true);
+            statusChick = 1;
         }
 
         if (Input.GetKeyUp(KeyCode.D))
         {
             animator.SetBool("Walk", false);
+            statusChick = 0;
         }
 
         if (Input.GetKey(KeyCode.A))
@@ -73,11 +93,13 @@ public class Player : MonoBehaviour
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
             transform.rotation = Quaternion.Euler(0, -90, 0);
             animator.SetBool("Walk", true);
+            statusChick = 1;
         }
 
         if (Input.GetKeyUp(KeyCode.A))
         {
             animator.SetBool("Walk", false);
+            statusChick = 0;
         }
         
         if (Input.GetKey(KeyCode.LeftShift))

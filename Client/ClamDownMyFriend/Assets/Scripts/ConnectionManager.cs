@@ -114,6 +114,10 @@ public class ConnectionManager : MonoBehaviour
     private int startCD = 0;
     private string randomMapRestartGame = "1";
 
+    public Text LDB1;
+    public Text LDB2;
+    public Text LDB3;
+
     /*private void OnGUI()
     {
 
@@ -210,6 +214,10 @@ public class ConnectionManager : MonoBehaviour
 
         socket.On("OnWinnerShow",OnWinnerShow);
 
+        socket.On("sendLeaderBoard1",OnLeaderBoard1);
+        socket.On("sendLeaderBoard2", OnLeaderBoard2);
+        socket.On("sendLeaderBoard3", OnLeaderBoard3);
+
         cachePlayerIDGroup = new PlayerIDGroup();
 
         respawnPoint = GameObject.Find("respawnPoint");
@@ -239,6 +247,10 @@ public class ConnectionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        socket.Emit("wantLeaderBoard1");
+        socket.Emit("wantLeaderBoard2");
+        socket.Emit("wantLeaderBoard3");
+
         connectManager();
 
         DetectPlayerConnect();
@@ -807,6 +819,21 @@ public class ConnectionManager : MonoBehaviour
             statusGame = "start";
            // Debug.Log("New map game is "+randomMapFromServer);
         }
+    }
+
+    void OnLeaderBoard1(SocketIOEvent evt)
+    {
+        LDB1.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
+    }
+
+    void OnLeaderBoard2(SocketIOEvent evt)
+    {
+        LDB2.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
+    }
+
+    void OnLeaderBoard3(SocketIOEvent evt)
+    {
+        LDB3.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
     }
 
     #region Callback Group

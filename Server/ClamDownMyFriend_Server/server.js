@@ -8,11 +8,21 @@ var playerIDList = [];
 var roomIDList = [];
 var roomDataList = {};
 
-var randomMap = Math.floor((Math.random() * 9)+1);
+var randomMap = Math.floor((Math.random() * 9) + 1);
 
-io.on("connection", (socket)=>{
+const leaderBoard = [];
+leaderBoard.length = 3;
 
-    console.log("client connected : "+socket.id);
+leaderBoard[0] = { name: 'Bob', m: 30, s: 3 };
+leaderBoard[1] = { name: 'Boon', m: 40, s: 4 };
+leaderBoard[2] = { name: 'Noob', m: 50, s: 5 };
+
+const templeaderBoard = [];
+templeaderBoard.length = 3;
+
+io.on("connection", (socket) => {
+
+    console.log("client connected : " + socket.id);
 
     //socket.join("lobby"+uid());
 
@@ -30,41 +40,86 @@ io.on("connection", (socket)=>{
 
     ClientUpdateMove(socket);
 
+   /* templeaderBoard[0] = leaderBoard[0];
+    templeaderBoard[1] = leaderBoard[1];
+    templeaderBoard[2] = leaderBoard[2];*/
+
+    socket.on('wantLeaderBoard1', function (data) {
+        socket.emit('sendLeaderBoard1', leaderBoard[0]);
+
+    });//end on wantLeaderBoard  
+
+    socket.on('wantLeaderBoard2', function (data) {
+        socket.emit('sendLeaderBoard2', leaderBoard[1]);
+
+    });//end on wantLeaderBoard  
+
+    socket.on('wantLeaderBoard3', function (data) {
+        socket.emit('sendLeaderBoard3', leaderBoard[2]);
+
+    });//end on wantLeaderBoard  
+
     socket.on('OnPlayerWinner', function (data) {
 
-        randomMap = Math.floor((Math.random() * 9)+1);
+
+        if (data.timeM < leaderBoard[0].m) {
+
+            leaderBoard[0].name = data.playername;
+            leaderBoard[0].m = data.timeM;
+            leaderBoard[0].s = data.timeS;
+
+
+        }//end if 0
+
+        else if (data.timeM == leaderBoard[0].m) {
+            if (data.timeS <= leaderBoard[0].s) {
+
+
+                leaderBoard[0].name = data.playername;
+                leaderBoard[0].m = data.timeM;
+                leaderBoard[0].s = data.timeS;
+
+
+
+            }
+
+        }//end if 0
+
+
+
+
+        randomMap = Math.floor((Math.random() * 9) + 1);
 
         var dataSend = {
-            "playerName":data.playername,"timeM":data.timeM,"timeS":data.timeS,"randomMap":randomMap
-            
+            "playerName": data.playername, "timeM": data.timeM, "timeS": data.timeS, "randomMap": randomMap
+
         };
-        
+
         socket.broadcast.to(data.currentroomname).emit("OnWinnerShow", dataSend);
         socket.emit("OnWinnerShow", dataSend);
-        console.log("New Map Is"+randomMap);
-        
-         console.log('Winner is '+data.playername+' with time '+data.timeM+' : '+data.timeS+' On Room Name '+data.currentroomname);
-    });
+        console.log("New Map Is" + randomMap);
 
-    socket.on("disconnect", ()=>{
+        console.log('Winner is ' + data.playername + ' with time ' + data.timeM + ' : ' + data.timeS + ' On Room Name ' + data.currentroomname);
 
-        console.log("client disconnected : "+socket.id);
+    });//end OnplayerWinner
+
+
+    socket.on("disconnect", () => {
+
+        console.log("client disconnected : " + socket.id);
 
         ClientDisconnect(io, socket);
     });
 });
 
-setInterval(()=>{
+setInterval(() => {
 
-    for(var i = 0; i < roomIDList.length; i++)
-    {
+    for (var i = 0; i < roomIDList.length; i++) {
         var roomName = roomIDList[i];
-        for(var j = 0; j < roomDataList[roomName].sockets.length; j++)
-        {
+        for (var j = 0; j < roomDataList[roomName].sockets.length; j++) {
             var socket = roomDataList[roomName].sockets[j];
 
-            if(socket != undefined)
-            {
+            if (socket != undefined) {
                 socket.emit("OnClientUpdateMoveList", roomDataList[roomName].playerData);
             }
         }
@@ -72,10 +127,10 @@ setInterval(()=>{
 
 }, 100);
 
-var ClientConnect = (io, socket)=>{
+var ClientConnect = (io, socket) => {
 
     var data = {
-        "uid":socket.id
+        "uid": socket.id
     };
 
     CountPlayer();
@@ -85,10 +140,10 @@ var ClientConnect = (io, socket)=>{
     console.log(randomMap);
 }
 
-var ClientDisconnect = (io, socket)=>{
+var ClientDisconnect = (io, socket) => {
 
     var data = {
-        "uid":socket.id
+        "uid": socket.id
     };
 
     /*for(var i = 0; i < playerIDList.length; i++)
@@ -107,22 +162,20 @@ var ClientDisconnect = (io, socket)=>{
     io.emit("OnClientDisconnect", data);
 }
 
-var ClientFetchPlayerList = (socket)=>{
+var ClientFetchPlayerList = (socket) => {
 
-    socket.on("OnClientFetchPlayerList", (data)=>{
+    socket.on("OnClientFetchPlayerList", (data) => {
 
-        var isRoomFound = (element)=>{
+        var isRoomFound = (element) => {
             return element == data.roomName;
         }
 
         var roomName = data.roomName;
 
-        if(roomIDList.find(isRoomFound) != undefined)
-        {
+        if (roomIDList.find(isRoomFound) != undefined) {
             var playerIds = [];
 
-            for(var i = 0; i < roomDataList[roomName].sockets.length; i++)
-            {
+            for (var i = 0; i < roomDataList[roomName].sockets.length; i++) {
                 playerIds.push(roomDataList[roomName].sockets[i].id);
             }
 
@@ -131,44 +184,43 @@ var ClientFetchPlayerList = (socket)=>{
             }
             socket.emit("OnClientFetchPlayerList", data);
         }
-        else
-        {
+        else {
             var data = {};
             socket.emit("OnClientFetchPlayerList", data);
         }
     });
-} 
+}
 
-var CountPlayer = ()=>{
-    console.log("Player total : "+ playerIDList.length);
+var CountPlayer = () => {
+    console.log("Player total : " + playerIDList.length);
 }
 
 
-var ClientFetchRoomList = (socket)=>{
-    
-    socket.on("OnClientFetchRoomList", ()=>{
+var ClientFetchRoomList = (socket) => {
+
+    socket.on("OnClientFetchRoomList", () => {
 
         data = {
-            "roomIDList":roomIDList
+            "roomIDList": roomIDList
         }
 
         socket.emit("OnClientFetchRoomList", data);
     });
 }
 
-var ClientCreateRoom = (socket)=>{
+var ClientCreateRoom = (socket) => {
     //roomName : string
-    socket.on("OnClientCreateRoom", data=>{
-        console.log("ClientCreateRoom : "+socket.id +" : "+data.roomName);
+    socket.on("OnClientCreateRoom", data => {
+        console.log("ClientCreateRoom : " + socket.id + " : " + data.roomName);
 
-        var isRoomFound = (element)=>{
+        var isRoomFound = (element) => {
             return element == data.roomName;
         }
 
-        if(roomIDList.find(isRoomFound) != undefined || data.roomName == ""){
+        if (roomIDList.find(isRoomFound) != undefined || data.roomName == "") {
             console.log("ClientCreateRoom : fail");
             socket.emit("OnClientCreateRoomFail", data);
-        }else{
+        } else {
             roomIDList.push(data.roomName);
             roomDataList[data.roomName] = {
                 "sockets": [socket],
@@ -180,79 +232,76 @@ var ClientCreateRoom = (socket)=>{
             };
 
 
-            socket.join(data.roomName, ()=>{
+            socket.join(data.roomName, () => {
                 console.log("CientCreatRoom : success");
                 socket.emit("OnClientCreateRoomSuccess", resultData);
 
                 var dataStart = {
-                    "startgame":"start","randomMap":randomMap
+                    "startgame": "start", "randomMap": randomMap
                 };
 
-                socket.emit("OnStartGame",dataStart);
+                socket.emit("OnStartGame", dataStart);
 
             });
         }
-        
+
     });
 }
 
-var ClientJoinRoom = (socket)=>{
-    socket.on("OnClientJoinRoom", (data)=>{
+var ClientJoinRoom = (socket) => {
+    socket.on("OnClientJoinRoom", (data) => {
         console.log("ClientJoinRoom");
 
-        var isRoomFound = (element)=>{
+        var isRoomFound = (element) => {
             return element == data.roomName;
         };
 
-        if(roomIDList.find(isRoomFound) != undefined && data.roomName != ""){
-            
-           
+        if (roomIDList.find(isRoomFound) != undefined && data.roomName != "") {
+
+
             roomDataList[data.roomName].sockets.push(socket);
 
             var resultData = {
                 uid: socket.id
             };
 
-            socket.join(data.roomName, ()=>{
+            socket.join(data.roomName, () => {
                 console.log("ClientJoinRoom : success");
                 socket.emit("OnOwnerClientJoinRoomSuccess", resultData);
                 socket.broadcast.to(data.roomName).emit("OnClientJoinRoomSuccess", resultData);
 
                 var dataStart = {
-                    "startgame":"start","randomMap":randomMap
+                    "startgame": "start", "randomMap": randomMap
                 };
 
-                socket.emit("OnStartGame",dataStart);
-            
+                socket.emit("OnStartGame", dataStart);
+
             });
 
-        }else{
+        } else {
             console.log("ClientJoinRoom : fail");
             socket.emit("OnClientJoinRoomFail", data);
         }
     });
 }
 
-var ClientLeaveRoom = (socket)=>{
+var ClientLeaveRoom = (socket) => {
 
-    socket.on("OnClientLeaveRoom", ()=>{
+    socket.on("OnClientLeaveRoom", () => {
         console.log("client leave room");
         LeaveRoom(socket);
     });
 }
 
-var LeaveRoom = (socket)=>{
+var LeaveRoom = (socket) => {
 
-    for(var i = 0; i < roomIDList.length;i++)
-    {
+    for (var i = 0; i < roomIDList.length; i++) {
         var roomName = roomIDList[i];
 
-        for(var j = 0; j < roomDataList[roomName].sockets.length; j++)
-        {
-            if(roomDataList[roomName].sockets[j].id == socket.id)
-            {
-                roomDataList[roomName].sockets.splice(j,1);
-                
+        for (var j = 0; j < roomDataList[roomName].sockets.length; j++) {
+            if (roomDataList[roomName].sockets[j].id == socket.id) {
+                roomDataList[roomName].sockets.splice(j, 1);
+
                 delete roomDataList[roomName].playerData[socket.id];
 
                 var data = {
@@ -267,8 +316,7 @@ var LeaveRoom = (socket)=>{
             }
         }
 
-        if(roomDataList[roomName].sockets.length <= 0)
-        {
+        if (roomDataList[roomName].sockets.length <= 0) {
             roomIDList.splice(i, 1);
             delete roomDataList[roomName];
             break;
@@ -276,19 +324,18 @@ var LeaveRoom = (socket)=>{
     }
 }
 
-var ClientUpdateMove = (socket)=>{
+var ClientUpdateMove = (socket) => {
 
-    socket.on("OnClientUpdateMove", (data)=>{
+    socket.on("OnClientUpdateMove", (data) => {
 
-        if(roomDataList[data.roomName] != undefined)
-        {
+        if (roomDataList[data.roomName] != undefined) {
             roomDataList[data.roomName].playerData[data.uid] = {
                 x: data.x,
                 y: data.y,
                 z: data.z,
             };
         }
-        
+
 
     });
 }
