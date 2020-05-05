@@ -184,11 +184,11 @@ var ClientCreateRoom = (socket)=>{
                 console.log("CientCreatRoom : success");
                 socket.emit("OnClientCreateRoomSuccess", resultData);
 
-                var data = {
+                var dataStart = {
                     "startgame":"start","randomMap":randomMap
                 };
 
-                socket.emit("OnStartGame",data);
+                socket.emit("OnStartGame",dataStart);
 
             });
         }
@@ -218,11 +218,11 @@ var ClientJoinRoom = (socket)=>{
                 socket.emit("OnOwnerClientJoinRoomSuccess", resultData);
                 socket.broadcast.to(data.roomName).emit("OnClientJoinRoomSuccess", resultData);
 
-                var data = {
+                var dataStart = {
                     "startgame":"start","randomMap":randomMap
                 };
 
-                socket.emit("OnStartGame",data);
+                socket.emit("OnStartGame",dataStart);
             
             });
 

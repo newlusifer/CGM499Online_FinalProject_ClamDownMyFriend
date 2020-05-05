@@ -5,8 +5,10 @@ ScriptsOnlyBuild:
     - LowPolyWater.LowPolyWater
     - Player
     - SocketIO.SocketIOComponent
+    - playerTrigger
     - randomMap
     - showMap
+    - timer
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -33,6 +35,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
+    - UnityEngine.UI.RawImage
     - UnityEngine.UI.Text
     com.unity.multiplayer-hlapi.Runtime.dll:
     - UnityEngine.Networking.NetworkCallbacks
@@ -85,29 +88,35 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11236}
     - Class: 114
-      Script: {instanceID: 11466}
+      Script: {instanceID: 11242}
     - Class: 114
-      Script: {instanceID: 11522}
+      Script: {instanceID: 11468}
     - Class: 114
-      Script: {instanceID: 11926}
+      Script: {instanceID: 11524}
     - Class: 114
-      Script: {instanceID: 12090}
+      Script: {instanceID: 11928}
     - Class: 114
-      Script: {instanceID: 12294}
+      Script: {instanceID: 12092}
     - Class: 114
-      Script: {instanceID: 12536}
+      Script: {instanceID: 12296}
     - Class: 114
-      Script: {instanceID: 12562}
+      Script: {instanceID: 12538}
     - Class: 114
-      Script: {instanceID: 12702}
+      Script: {instanceID: 12564}
     - Class: 114
-      Script: {instanceID: 12954}
+      Script: {instanceID: 12704}
     - Class: 114
-      Script: {instanceID: 13256}
+      Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 13380}
+      Script: {instanceID: 12956}
     - Class: 114
-      Script: {instanceID: 13916}
+      Script: {instanceID: 13258}
+    - Class: 114
+      Script: {instanceID: 13382}
+    - Class: 114
+      Script: {instanceID: 13482}
+    - Class: 114
+      Script: {instanceID: 13922}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -137,10 +146,16 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: 7c41bac925373a84fee57f62b9643c9b
+      Hash: 9bf54bcf573b62d9371b55e2b5958c1c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
+  - hash:
+      serializedVersion: 2
+      Hash: 09531c80f9a346fbf7b28d66f2d1c242
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: timer
   - hash:
       serializedVersion: 2
       Hash: c42672c997f8be6b1aa86a927ebea785
@@ -407,7 +422,7 @@ ScriptsOnlyBuild:
     className: NetworkTransformVisualizer
   - hash:
       serializedVersion: 2
-      Hash: 714a547a2e068a599d1910f923b82fd6
+      Hash: 4a620913205736e891e246a42b2edbb3
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ConnectionManager
@@ -569,7 +584,7 @@ ScriptsOnlyBuild:
     className: NetworkBehaviour
   - hash:
       serializedVersion: 2
-      Hash: 77b176f5c4ea0985dc4fc16d8400c73a
+      Hash: 1b680bf0051c7f8a8fd30b52d5815f3b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: showMap
@@ -609,6 +624,18 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools
     className: BeforeAfterTestCommandState
+  - hash:
+      serializedVersion: 2
+      Hash: f51cf427e08f07bd95548341cd157909
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: playerTrigger
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GoalTrigger
   - hash:
       serializedVersion: 2
       Hash: 1dcb82730d983b77cec736c6ef19f814
@@ -762,4 +789,5 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/gamePlay.unity
-  playerPath: "D:/\u0E07\u0E32\u0E19/CGM499_Online/CGM499Online_FinalProject_ClamDownMyFriend/ClamDownMyFriend/build/test6/SocketIO-RealTime.exe"
+  playerPath: "D:/\u0E07\u0E32\u0E19/CGM499_Online/CGM499Online_FinalProject_ClamDownMyFriend/Client/ClamDownMyFriend/build/New
+    folder (2)/SocketIO-RealTime.exe"
