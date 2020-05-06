@@ -40,34 +40,51 @@ io.on("connection", (socket) => {
 
     ClientUpdateMove(socket);
 
-   /* templeaderBoard[0] = leaderBoard[0];
-    templeaderBoard[1] = leaderBoard[1];
-    templeaderBoard[2] = leaderBoard[2];*/
+    /* templeaderBoard[0] = leaderBoard[0];
+     templeaderBoard[1] = leaderBoard[1];
+     templeaderBoard[2] = leaderBoard[2];*/
 
     socket.on('wantLeaderBoard1', function (data) {
-        socket.emit('sendLeaderBoard1', leaderBoard[0]);
+
+        var dataSend = {
+            "name": leaderBoard[0].name, "m": leaderBoard[0].m.toString(), "s": leaderBoard[0].s.toString()
+
+        };
+
+        socket.emit('sendLeaderBoard1', dataSend);
 
     });//end on wantLeaderBoard  
 
     socket.on('wantLeaderBoard2', function (data) {
-        socket.emit('sendLeaderBoard2', leaderBoard[1]);
+
+        var dataSend = {
+            "name": leaderBoard[1].name, "m": leaderBoard[1].m.toString(), "s": leaderBoard[1].s.toString()
+
+        };
+
+        socket.emit('sendLeaderBoard2', dataSend);
 
     });//end on wantLeaderBoard  
 
     socket.on('wantLeaderBoard3', function (data) {
-        socket.emit('sendLeaderBoard3', leaderBoard[2]);
+
+        var dataSend = {
+            "name": leaderBoard[2].name, "m": leaderBoard[2].m.toString(), "s": leaderBoard[2].s.toString()
+
+        };
+
+        socket.emit('sendLeaderBoard3', dataSend);
 
     });//end on wantLeaderBoard  
 
-    socket.on('OnPlayerWinner', function (data) {
+    socket.on('OnPlayerWinner', function (data) {   
+      
+       if (data.timeM < leaderBoard[0].m) {
 
-
-        if (data.timeM < leaderBoard[0].m) {
 
             leaderBoard[0].name = data.playername;
             leaderBoard[0].m = data.timeM;
             leaderBoard[0].s = data.timeS;
-
 
         }//end if 0
 
@@ -80,6 +97,49 @@ io.on("connection", (socket) => {
                 leaderBoard[0].s = data.timeS;
 
 
+            }
+
+        }//end if 0
+
+        else if (data.timeM < leaderBoard[1].m) {
+
+
+            leaderBoard[1].name = data.playername;
+            leaderBoard[1].m = data.timeM;
+            leaderBoard[1].s = data.timeS;
+
+        }//end if 0
+
+        else if (data.timeM == leaderBoard[1].m) {
+            if (data.timeS <= leaderBoard[1].s) {
+
+
+                leaderBoard[1].name = data.playername;
+                leaderBoard[1].m = data.timeM;
+                leaderBoard[1].s = data.timeS;
+
+
+            }
+
+        }//end if 0
+
+        else if (data.timeM < leaderBoard[2].m) {
+
+
+            leaderBoard[2].name = data.playername;
+            leaderBoard[2].m = data.timeM;
+            leaderBoard[2].s = data.timeS;
+
+        }//end if 0
+
+        else if (data.timeM == leaderBoard[2].m) {
+            if (data.timeS <= leaderBoard[2].s) {
+
+
+                leaderBoard[2].name = data.playername;
+                leaderBoard[2].m = data.timeM;
+                leaderBoard[2].s = data.timeS;
+
 
             }
 
@@ -88,15 +148,18 @@ io.on("connection", (socket) => {
 
 
 
+
+
         randomMap = Math.floor((Math.random() * 9) + 1);
 
         var dataSend = {
-            "playerName": data.playername, "timeM": data.timeM, "timeS": data.timeS, "randomMap": randomMap
+            "playerName": data.playername, "timeM": data.timeM.toString(), "timeS": data.timeS.toString(), "randomMap": randomMap
 
         };
 
         socket.broadcast.to(data.currentroomname).emit("OnWinnerShow", dataSend);
         socket.emit("OnWinnerShow", dataSend);
+
         console.log("New Map Is" + randomMap);
 
         console.log('Winner is ' + data.playername + ' with time ' + data.timeM + ' : ' + data.timeS + ' On Room Name ' + data.currentroomname);

@@ -10,11 +10,16 @@ public class playerTrigger : MonoBehaviour
     public static int statusWinner = 0;
     public static int resetPosition = 0;
 
+    public GameObject winnerSound;
+
     // Start is called before the first frame update
     void Start()
     {
         respawnPoint = GameObject.Find("respawnPoint");
         respawnPVec = new Vector3(respawnPoint.transform.position.x, respawnPoint.transform.position.y, respawnPoint.transform.position.z);
+
+        //winnerSound = GameObject.Find("winnerSound");
+        winnerSound.SetActive(false);
     }
 
     // Update is called once per frame
@@ -40,11 +45,16 @@ public class playerTrigger : MonoBehaviour
             if (ConnectionManager.statusGame=="start")
             {
                 statusWinner = 1;
+
+                Debug.Log("is win.....");
+
+                StartCoroutine(waitForWinnerSound());
             }
 
             if (ConnectionManager.statusGame == "stop")
             {
                 statusWinner = 0;
+                Debug.Log("is not win.....");
             }
                 
             
@@ -62,5 +72,12 @@ public class playerTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         transform.position = respawnPVec;
+    }
+
+    IEnumerator waitForWinnerSound()
+    {
+        winnerSound.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        winnerSound.SetActive(false);
     }
 }

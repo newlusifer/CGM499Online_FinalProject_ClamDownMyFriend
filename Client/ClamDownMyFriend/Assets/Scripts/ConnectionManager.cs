@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(SocketIOComponent))]
 public class ConnectionManager : MonoBehaviour
@@ -117,6 +118,8 @@ public class ConnectionManager : MonoBehaviour
     public Text LDB1;
     public Text LDB2;
     public Text LDB3;
+
+    public GameObject backToMainMenu;
 
     /*private void OnGUI()
     {
@@ -262,12 +265,14 @@ public class ConnectionManager : MonoBehaviour
             {
                 statusOfMenu = 1;
                 menu.SetActive(true);
+                backToMainMenu.SetActive(true);
             }
 
            else if (statusOfMenu == 1)
             {
                 statusOfMenu = 0;
                 menu.SetActive(false);
+                backToMainMenu.SetActive(false);
             }
         }
 
@@ -823,17 +828,22 @@ public class ConnectionManager : MonoBehaviour
 
     void OnLeaderBoard1(SocketIOEvent evt)
     {
-        LDB1.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
+        LDB1.text = evt.data["name"].str + " with " + evt.data["m"].str + "." + evt.data["s"].str + " minute";
     }
 
     void OnLeaderBoard2(SocketIOEvent evt)
     {
-        LDB2.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
+        LDB2.text = evt.data["name"].str + " with " + evt.data["m"].str + "." + evt.data["s"].str + " minute";
     }
 
     void OnLeaderBoard3(SocketIOEvent evt)
     {
-        LDB3.text = evt.data["name"].str + " with " + evt.data["m"] + "." + evt.data["s"] + " minute";
+        LDB3.text = evt.data["name"].str + " with " + evt.data["m"].str + "." + evt.data["s"].str + " minute";
+    }
+
+    public void backToMainMenuFunc()
+    {
+        SceneManager.LoadScene("title");
     }
 
     #region Callback Group
