@@ -12,6 +12,8 @@ ScriptsOnlyBuild:
     - timer
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -36,8 +38,10 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.InputField
     - UnityEngine.UI.RawImage
     - UnityEngine.UI.Text
+    com.unity.multiplayer-hlapi.Runtime.dll:
+    - UnityEngine.Networking.NetworkCallbacks
   sceneClasses:
-    Assets/Scenes/gamePlay.unity:
+    Assets/Scenes/for1024x768/gameplay2.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -138,7 +142,7 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
-    Assets/Scenes/title.unity:
+    Assets/Scenes/for1024x768/title2.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -219,7 +223,7 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
-    Assets/Scenes/tutorial.unity:
+    Assets/Scenes/for1024x768/tutorial2.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -949,7 +953,7 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 19
   scenePathNames:
-  - Assets/Scenes/title.unity
-  - Assets/Scenes/tutorial.unity
-  - Assets/Scenes/gamePlay.unity
-  playerPath: "D:/\u0E07\u0E32\u0E19/CGM499_Online/CGM499Online_FinalProject_ClamDownMyFriend/Client/ClamDownMyFriend/build/ClamDownMyFriend/SocketIO-RealTime.exe"
+  - Assets/Scenes/for1024x768/title2.unity
+  - Assets/Scenes/for1024x768/tutorial2.unity
+  - Assets/Scenes/for1024x768/gameplay2.unity
+  playerPath: "D:/\u0E07\u0E32\u0E19/CGM499_Online/CGM499Online_FinalProject_ClamDownMyFriend/Client/ClamDownMyFriend/build/ClamDownMyFriend(720x480)/SocketIO-RealTime.exe"

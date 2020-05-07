@@ -846,6 +846,11 @@ public class ConnectionManager : MonoBehaviour
         SceneManager.LoadScene("title");
     }
 
+    public void backToMainMenuFunc2()
+    {
+        SceneManager.LoadScene("title2");
+    }
+
     #region Callback Group
     void OnClientConnect(SocketIOEvent evt)
     {

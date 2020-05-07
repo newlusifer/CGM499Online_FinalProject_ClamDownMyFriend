@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/gamePlay.unity
     guid: 48597a0fb36428d45b58f4638903d032
+  - enabled: 0
+    path: Assets/Scenes/for1024x768/title2.unity
+    guid: 39b7f88279f28f348a2f51e8bda48cc0
+  - enabled: 0
+    path: Assets/Scenes/for1024x768/tutorial2.unity
+    guid: eb4a2dfe15d7def42ba674ca2c2935a4
+  - enabled: 0
+    path: Assets/Scenes/for1024x768/gameplay2.unity
+    guid: 11926e94af9fafc4cabb3f2e5d721868
   m_configObjects: {}

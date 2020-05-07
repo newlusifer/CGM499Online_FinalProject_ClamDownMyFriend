@@ -36,4 +36,21 @@ public class scenManager : MonoBehaviour
     {
         SceneManager.LoadScene("title");
     }
+
+    public void goPlay2()
+    {
+        SceneManager.LoadScene("gamePlay2");
+    }
+
+    public void goTutorial2()
+    {
+        SceneManager.LoadScene("tutorial2");
+    }
+
+    public void backToMenu2()
+    {
+        SceneManager.LoadScene("title2");
+    }
+
+
 }
